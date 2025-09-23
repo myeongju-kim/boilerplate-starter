@@ -21,13 +21,14 @@ public final class ArgsParser {
 
         String jdbcUrl = kv.getOrDefault("jdbcurl", kv.get("jdbcUrl"));
         String basePackage = kv.getOrDefault("basepackage", kv.get("basePackage"));
+        String driverClassName = kv.getOrDefault("driverclassname", kv.get("driverClassName"));
         if (isBlank(jdbcUrl) || isBlank(basePackage)) {
             System.err.println("[codegen] Missing required args: jdbcUrl, basePackage");
             printUsageAndExit();
         }
 
         return new CodegenInputs(jdbcUrl, firstNonBlank(kv.get("username"), kv.get("user")), firstNonBlank(kv.get("password"), kv.get("pass")),
-            basePackage, firstNonBlank(kv.get("outputdir"), kv.get("outputDir")));
+            basePackage, firstNonBlank(kv.get("outputdir"), kv.get("outputDir")), driverClassName);
     }
 
     // --- helpers ---
