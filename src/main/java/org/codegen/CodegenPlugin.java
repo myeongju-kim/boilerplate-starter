@@ -7,7 +7,6 @@ import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 import org.codegen.generator.CodegenExecutor;
 import org.codegen.generator.CodegenInputs;
-import org.codegen.utils.ArgsParser;
 
 public class CodegenPlugin implements Plugin<Project> {
 
@@ -16,6 +15,10 @@ public class CodegenPlugin implements Plugin<Project> {
         project.getTasks().register("generateCode", GenerateCodeTask.class, task -> {
             task.setGroup("codegen");
             task.setDescription("Generate sources from DB schema");
+        });
+
+        project.getTasks().named("compileJava").configure(task -> {
+            task.dependsOn("generateCode");
         });
     }
 
