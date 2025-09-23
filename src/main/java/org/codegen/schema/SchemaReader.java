@@ -18,7 +18,8 @@ public final class SchemaReader {
     /**
      * 스키마 전체 스캔 (기본: TABLE 만)
      */
-    public List<TableMeta> read() throws SQLException {
+    public List<TableMeta> read() throws SQLException, ClassNotFoundException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
         try (Connection conn = DriverManager.getConnection(config.url, config.username, config.password)) {
             DatabaseMetaData meta = conn.getMetaData();
             String catalog = conn.getCatalog();
