@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "org.codegen"
-version = "1.0.0"
+version = "1.0.1"
 
 repositories {
     mavenCentral()
@@ -20,6 +20,9 @@ java {
 
 dependencies {
     implementation("org.freemarker:freemarker:2.3.32")
+    implementation("org.yaml:snakeyaml:2.2")
+    runtimeOnly("com.mysql:mysql-connector-j:8.3.0")
+    implementation("com.mysql:mysql-connector-j:8.3.0")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
