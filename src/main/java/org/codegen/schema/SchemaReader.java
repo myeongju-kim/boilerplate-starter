@@ -75,6 +75,8 @@ public final class SchemaReader {
                 }
             }
             return Collections.unmodifiableList(out);
+        } catch (SQLException e) {
+            throw new SQLException("Failed to read schema from " + config.url, e);
         }
     }
 
