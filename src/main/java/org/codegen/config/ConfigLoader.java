@@ -64,6 +64,8 @@ public final class ConfigLoader {
         String basePackage = firstNonBlank(str(conf.get("codegen.base-package")), str(conf.get("codegen.basePackage")));
         String outputDir   = firstNonBlank(str(conf.get("codegen.output-dir")), str(conf.get("codegen.outputDir")));
         String driverClassName = firstNonBlank(str(conf.get("codegen.driver-class-name")), str(conf.get("codegen.driverClassName")));
+        String mapperRoot = firstNonBlank(str(conf.get("codegen.mapper-root")), str(conf.get("codegen.mapperRoot")));
+        boolean autoGenerate = "true".equalsIgnoreCase(firstNonBlank(str(conf.get("codegen.auto-generate")), str(conf.get("codegen.autoGenerate"))));
 
         // spring.datasource.* 대체
         if (isBlank(jdbcUrl)) {
@@ -76,7 +78,7 @@ public final class ConfigLoader {
         if (isBlank(basePackage)) throw new IllegalArgumentException("[codegen] Missing property: codegen.base-package");
         if (isBlank(jdbcUrl))     throw new IllegalArgumentException("[codegen] Missing property: codegen.jdbc-url (or spring.datasource.url)");
 
-        return new CodegenInputs(jdbcUrl, username, password, basePackage, outputDir, driverClassName);
+        return new CodegenInputs(jdbcUrl, username, password, basePackage, outputDir, mapperRoot, driverClassName, autoGenerate);
     }
 
     // ---------- helpers ----------

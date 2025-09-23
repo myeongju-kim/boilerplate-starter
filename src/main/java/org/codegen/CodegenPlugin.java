@@ -28,16 +28,21 @@ public class CodegenPlugin implements Plugin<Project> {
         @TaskAction
         public void run() throws Exception {
             CodegenInputs in = ConfigLoader.load(getProject());
+            if (!in.isAutoGenerate()) {
+                return;
+            }
             getLogger().lifecycle("[codegen] Start generation (basePackage={}, url={})",
                 in.getBasePackage(), ConfigLoader.maskPwd(in.getJdbcUrl()));
             try {
                 new CodegenExecutor().run(in);
             } catch (Exception e) {
                 Throwable root = e;
-                while (root.getCause() != null) root = root.getCause();
+                while (root.getCause() != null) {
+                    root = root.getCause();
+                }
                 getLogger().error("[codegen] root-cause: {}", root.toString()); // ★ 여기 찍힘
                 throw new RuntimeException("[codegen] Generation failed. url=" +
-                    ConfigLoader.maskPwd(in.getJdbcUrl()) + ", user=" + (in.getUsername()==null?"":in.getUsername()) +
+                    ConfigLoader.maskPwd(in.getJdbcUrl()) + ", user=" + (in.getUsername() == null ? "" : in.getUsername()) +
                     " (Check DB server, credentials, or JDBC URL)", e);
             }
         }

@@ -17,15 +17,14 @@ public class CodegenExecutor {
         SchemaReader reader = new SchemaReader(new SchemaConfig(in.getJdbcUrl(), in.getUsername(), in.getPassword(), null, in.getDriverClassName()));
         var tables = reader.read();
         String outputRoot = (in.getOutputRoot() == null || in.getOutputRoot().isBlank()) ? in.getDefaultOutputRoot() : in.getOutputRoot();
-        CodegenConfig cfg = new CodegenConfig(in.getBasePackage(), outputRoot);
+        String mapperRoot = (in.getMapperRoot() == null || in.getMapperRoot().isBlank()) ? in.getDefaultMapperRoot() : in.getMapperRoot();
+        CodegenConfig cfg = new CodegenConfig(in.getBasePackage(), outputRoot, mapperRoot);
         OutputResolver outputs = new OutputResolver(cfg);
         TemplateRenderer renderer = new TemplateRenderer();
         TemplateGenerator gen = new TemplateGenerator(cfg, outputs, renderer);
 
-        List<GenerationType> types = List.of(GenerationType.CONTROLLER, GenerationType.SERVICE, GenerationType.MAPPER, GenerationType.ENTITY);
-
         for (TableMeta t : tables) {
-            gen.generate(new TemplateVars(t.tableName), types);
+            gen.generate(new TemplateVars(t.tableName));
         }
     }
 }

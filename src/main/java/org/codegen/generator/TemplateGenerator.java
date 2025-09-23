@@ -26,17 +26,18 @@ public class TemplateGenerator {
     private Map<String, Object> baseModel(TemplateVars v) {
         Map<String, Object> m = new HashMap<>();
         m.put("package", cfg.getBasePackage());
-        m.put("packageName", v.getPackageName());
-        m.put("className", v.getClassName());
-        m.put("varName", v.getVarName());
-        m.put("pathName", v.getPathName());  // 모두 공통으로 사용 (컨트롤러만 필요해도 그냥 포함)
+        m.put("packageName", v.packageName);
+        m.put("className", v.className);
+        m.put("varName", v.varName);
+        m.put("pathName", v.pathName);
+        m.put("tableName", v.tableName);
         return m;
     }
 
-    public void generate(TemplateVars v, List<GenerationType> types) throws Exception {
+    public void generate(TemplateVars v) throws Exception {
         Map<String, Object> model = baseModel(v);
-        for (GenerationType t : types) {
-            Path out = outputs.resolve(v, t.layerDir(), v.getClassName() + t.suffix() + ".java");
+        for (GenerationType t : GenerationType.values()) {
+            Path out = outputs.resolve(v, t.layerDir(), v.className + t.suffix() + t.extension(), t == GenerationType.MAPPER_XML);
             renderer.renderToFile(t.templateName(), model, out);
             System.out.println("[write] " + out.toAbsolutePath());
         }

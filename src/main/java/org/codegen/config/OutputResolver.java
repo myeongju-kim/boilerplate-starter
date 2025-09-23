@@ -16,10 +16,15 @@ public class OutputResolver {
         this.cfg = cfg;
     }
 
-    public Path resolve(TemplateVars vars, String layer, String fileName) {
+    public Path resolve(TemplateVars vars, String layer, String fileName, boolean isXml) {
+        if (isXml) {
+            return cfg.getMapperRoot()
+                .resolve(vars.packageName)
+                .resolve(fileName);
+        }
         return cfg.getOutRoot()
             .resolve(cfg.getBasePackage().replace('.', '/'))
-            .resolve(vars.getPackageName())
+            .resolve(vars.packageName)
             .resolve(layer)
             .resolve(fileName);
     }
