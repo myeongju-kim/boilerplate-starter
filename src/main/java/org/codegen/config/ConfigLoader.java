@@ -63,18 +63,20 @@ public final class ConfigLoader {
         String password    = firstNonBlank(str(conf.get("codegen.password")));
         String basePackage = firstNonBlank(str(conf.get("codegen.base-package")), str(conf.get("codegen.basePackage")));
         String outputDir   = firstNonBlank(str(conf.get("codegen.output-dir")), str(conf.get("codegen.outputDir")));
+        String driverClassName = firstNonBlank(str(conf.get("codegen.driver-class-name")), str(conf.get("codegen.driverClassName")));
 
         // spring.datasource.* 대체
         if (isBlank(jdbcUrl)) {
             jdbcUrl = firstNonBlank(str(conf.get("spring.datasource.url")), str(conf.get("spring.datasource.jdbc-url")));
             username = firstNonBlank(username, str(conf.get("spring.datasource.username")));
             password = firstNonBlank(password, str(conf.get("spring.datasource.password")));
+            driverClassName = firstNonBlank(driverClassName, str(conf.get("spring.datasource.driver-class-name")));
         }
 
         if (isBlank(basePackage)) throw new IllegalArgumentException("[codegen] Missing property: codegen.base-package");
         if (isBlank(jdbcUrl))     throw new IllegalArgumentException("[codegen] Missing property: codegen.jdbc-url (or spring.datasource.url)");
 
-        return new CodegenInputs(jdbcUrl, username, password, basePackage, outputDir);
+        return new CodegenInputs(jdbcUrl, username, password, basePackage, outputDir, driverClassName);
     }
 
     // ---------- helpers ----------

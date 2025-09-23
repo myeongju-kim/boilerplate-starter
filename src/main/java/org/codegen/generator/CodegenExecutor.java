@@ -14,7 +14,7 @@ public class CodegenExecutor {
 
     public void run(CodegenInputs in) throws Exception {
         //TODO: mysql, pg 등 db종류에 따른 jdbc driver pattern 처리 필요
-        SchemaReader reader = new SchemaReader(new SchemaConfig(in.getJdbcUrl(), in.getUsername(), in.getPassword(), null));
+        SchemaReader reader = new SchemaReader(new SchemaConfig(in.getJdbcUrl(), in.getUsername(), in.getPassword(), null, in.getDriverClassName()));
         var tables = reader.read();
         String outputRoot = (in.getOutputRoot() == null || in.getOutputRoot().isBlank()) ? in.getDefaultOutputRoot() : in.getOutputRoot();
         CodegenConfig cfg = new CodegenConfig(in.getBasePackage(), outputRoot);

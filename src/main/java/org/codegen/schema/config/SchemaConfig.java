@@ -13,6 +13,7 @@ public class SchemaConfig {
      * Postgres 등은 "public" 등 스키마명, MySQL은 보통 null (catalog에 DB명)
      */
     public final String schemaPattern;
+    public final String driverClassName;
 
     /**
      * 기본: {"TABLE"}; VIEW까지 원하면 {"TABLE","VIEW"}
@@ -28,19 +29,20 @@ public class SchemaConfig {
      */
     public final Set<String> excludeTables;
 
-    public SchemaConfig(String url, String username, String password, String schemaPattern) {
-        this(url, username, password, schemaPattern,
+    public SchemaConfig(String url, String username, String password, String schemaPattern, String driverClassName) {
+        this(url, username, password, schemaPattern, driverClassName,
             new String[]{"TABLE"},
             Collections.emptySet(),
             Collections.emptySet());
     }
 
-    public SchemaConfig(String url, String username, String password, String schemaPattern,
+    public SchemaConfig(String url, String username, String password, String schemaPattern, String driverClassName,
         String[] tableTypes, Set<String> includeTables, Set<String> excludeTables) {
         this.url = url;
         this.username = username;
         this.password = password;
         this.schemaPattern = schemaPattern;
+        this.driverClassName = driverClassName;
         this.tableTypes = tableTypes == null ? new String[]{"TABLE"} : tableTypes;
         this.includeTables = includeTables == null ? Collections.emptySet() : includeTables;
         this.excludeTables = excludeTables == null ? Collections.emptySet() : excludeTables;

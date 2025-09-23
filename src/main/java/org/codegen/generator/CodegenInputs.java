@@ -7,13 +7,15 @@ public class CodegenInputs {
     private String password;
     private String basePackage;
     private String outputRoot;
+    private String driverClassName;
 
-    public CodegenInputs(String jdbcUrl, String username, String password, String basePackage, String outputRoot) {
+    public CodegenInputs(String jdbcUrl, String username, String password, String basePackage, String outputRoot, String driverClassName) {
         this.jdbcUrl = jdbcUrl;
         this.username = username;
         this.password = password;
         this.basePackage = basePackage;
         this.outputRoot = outputRoot;
+        this.driverClassName = driverClassName;
     }
 
     public String getJdbcUrl() {
@@ -30,6 +32,10 @@ public class CodegenInputs {
 
     public String getBasePackage() {
         return basePackage;
+    }
+
+    public String getDriverClassName() {
+        return driverClassName;
     }
 
     public String getOutputRoot() {
