@@ -33,10 +33,10 @@ tasks.test {
 gradlePlugin {
     plugins {
         create("codegenPlugin") {
-            id = "io.github.myeongju-kim.codegen"   // <-- 변경됨
-            implementationClass = "org.codegen.CodegenPlugin" // 패키지는 그대로 사용 가능
-            displayName = "DB Codegen Plugin"
-            description = "Generates boilerplate code from DB schema at build time"
+            id = "io.github.myeongju-kim.codegen"
+            implementationClass = "org.codegen.CodegenPlugin"
+            displayName = "Boilerplate Starter Plugin"
+            description = "A Gradle plugin that generates boilerplate code (Controller, Service, Repository, DTO, MyBatis Mapper) for Spring Boot projects."
             website.set("https://github.com/myeongju-kim/boilerplate-starter")
             vcsUrl.set("https://github.com/myeongju-kim/boilerplate-starter.git")
             tags.set(listOf("codegen", "db", "generator", "spring"))
