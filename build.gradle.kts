@@ -5,7 +5,7 @@ plugins {
     id("maven-publish")
 }
 
-group = "org.codegen"
+group = "io.github.myeongju-kim"   // <-- 변경됨
 version = "1.0.4"
 
 repositories {
@@ -33,8 +33,8 @@ tasks.test {
 gradlePlugin {
     plugins {
         create("codegenPlugin") {
-            id = "org.codegen"
-            implementationClass = "org.codegen.CodegenPlugin"
+            id = "io.github.myeongju-kim.codegen"   // <-- 변경됨
+            implementationClass = "org.codegen.CodegenPlugin" // 패키지는 그대로 사용 가능
             displayName = "DB Codegen Plugin"
             description = "Generates boilerplate code from DB schema at build time"
             website.set("https://github.com/myeongju-kim/boilerplate-starter")
