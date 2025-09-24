@@ -17,5 +17,5 @@ public interface ${className}Mapper {
 
     int update(${className}Entity e);
 
-    int deleteBy(${className}Entity e);
+    int delete(${className}Entity e);
 }

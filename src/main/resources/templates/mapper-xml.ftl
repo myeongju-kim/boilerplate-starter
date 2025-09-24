@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="${package}.${packageName}.mapper.${className}Mapper">
     <!-- TODO: change Object to specific type -->
-    <select id="findById" resultMap="${package}.${packageName}.entity.${className}Entity">
+    <select id="findById" resultType="${package}.${packageName}.entity.${className}Entity">
         SELECT
           *
         FROM
@@ -13,7 +13,7 @@
         </#noparse>
     </select>
 
-    <select id="findAll" resultMap="${package}.${packageName}.entity.${className}Entity">
+    <select id="findAll" resultType="${package}.${packageName}.entity.${className}Entity">
         SELECT
           *
         FROM
@@ -42,7 +42,7 @@
         </#noparse>
     </update>
     <!-- TODO: change Object to specific type -->
-    <delete id="deleteById" parameterType="${package}.${packageName}.entity.${className}Entity">
+    <delete id="delete" parameterType="${package}.${packageName}.entity.${className}Entity">
         DELETE FROM
           ${tableName}
         <#noparse>
