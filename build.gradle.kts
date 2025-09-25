@@ -5,7 +5,7 @@ plugins {
     id("maven-publish")
 }
 
-group = "io.github.myeongju-kim"   // <-- 변경됨
+group = "io.github.myeongju-kim"
 version = "1.0.4"
 
 repositories {
