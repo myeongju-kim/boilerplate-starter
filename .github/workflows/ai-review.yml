@@ -2,7 +2,12 @@ name: AI Code Review
 
 on:
   pull_request:
+    branches: [ main, develop ]
     types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   review:
@@ -11,15 +16,40 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run Claude Code Review
+      - name: Run Claude Code Review (API)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          # Claude CLI 설치 (예시)
-          npm install -g @anthropic-ai/claude-code
+          echo "📖 Loading SPEC.md ..."
+          SPEC_CONTENT=$(cat ./SPEC.md)
 
-          # 리뷰 실행 - SPEC.md 기준으로 결과 파일 생성
-          claude code review --spec ./SPEC.md --output ./ai-review-result.md
+          echo "🔍 Getting code diff for PR ..."
+          # 변경된 코드(diff) 추출
+          git fetch origin ${{ github.event.pull_request.base.ref }}
+          DIFF=$(git diff origin/${{ github.event.pull_request.base.ref }}...HEAD || echo "no diff")
+
+          echo "🧠 Sending request to Claude API ..."
+          RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
+            -H "x-api-key: $ANTHROPIC_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"model\": \"claude-3-opus-20240229\",
+              \"max_tokens\": 2000,
+              \"messages\": [
+                {
+                  \"role\": \"user\",
+                  \"content\": \"You are a senior code reviewer. Review the following code diff based on the project rules defined in SPEC.md. Provide clear, concise feedback.\n\n### SPEC.md\n$SPEC_CONTENT\n\n### CODE DIFF\n$DIFF\"
+                }
+              ]
+            }" | jq -r '.content[0].text')
+
+          echo "📝 Writing result to ai-review-result.md ..."
+          echo "$RESPONSE" > ./ai-review-result.md
 
       - name: Post Review Comment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          echo "💬 Posting review comment to PR..."
           gh pr comment ${{ github.event.pull_request.number }} \
             --body-file ./ai-review-result.md
