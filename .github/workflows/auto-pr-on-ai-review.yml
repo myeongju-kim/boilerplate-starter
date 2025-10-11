@@ -1,0 +1,39 @@
+name: Auto PR on Claude Code Review
+
+on:
+  push:
+    paths:
+      - "ai-review-result.md"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get branch info
+        id: vars
+        run: |
+          CURRENT_BRANCH=$(echo "${GITHUB_REF#refs/heads/}")
+          echo "branch=$CURRENT_BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TITLE="🤖 AI Code Review by Claude Code"
+          BODY_FILE="ai-review-result.md"
+          BASE_BRANCH="develop"
+
+          echo "Creating PR from ${GITHUB_REF#refs/heads/} → $BASE_BRANCH"
+          gh pr create \
+            --title "$TITLE" \
+            --body-file "$BODY_FILE" \
+            --base "$BASE_BRANCH" \
+            --head "${{ steps.vars.outputs.branch }}" \
+            || echo "PR already exists or no changes to push."
