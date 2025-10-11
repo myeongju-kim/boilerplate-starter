@@ -1,0 +1,25 @@
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Claude Code Review
+        run: |
+          # Claude CLI 설치 (예시)
+          npm install -g @anthropic-ai/claude-code
+
+          # 리뷰 실행 - SPEC.md 기준으로 결과 파일 생성
+          claude code review --spec ./SPEC.md --output ./ai-review-result.md
+
+      - name: Post Review Comment
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} \
+            --body-file ./ai-review-result.md
